@@ -19,6 +19,8 @@ function act_init(_, obs) {
 // 3. Initialize shortCatcher or Check primary content browser
 function act_pageManager(mut) {
     removeShortNav();
+    const related = getRelated();
+    if (related) observe(related, act_findSubContents);
     mut.forEach((u) =>
         u.addedNodes.forEach((n) => {
             if (n.nodeName === "YTD-BROWSE" && n.ELEMENT_NODE) {
@@ -40,8 +42,17 @@ function act_pageManager(mut) {
 function act_findSubContents(mut, obs) {
     mut.forEach((u) => {
         u.addedNodes.forEach((n) => {
-            if (n.nodeName === "YTD-RICH-GRID-RENDERER" && n.ELEMENT_NODE) {
+            if (
+                (n.nodeName === "YTD-RICH-GRID-RENDERER" ||
+                    n.nodeName === "YTD-ITEM-SECTION-RENDERER") &&
+                n.ELEMENT_NODE
+            ) {
                 const contents = n.querySelector("div[id=contents]");
+                contents
+                    .querySelectorAll("ytd-reel-shelf-renderer")
+                    .forEach((e) => {
+                        e.style.display = "none";
+                    });
                 obs.disconnect();
                 observe(contents, act_shortCatcher);
             }
@@ -54,13 +65,14 @@ function act_shortCatcher(mut) {
     mut.forEach((m) =>
         m.addedNodes.forEach((n) => {
             if (
-                n.nodeName === "YTD-RICH-SECTION-RENDERER" &&
-                n.ELEMENT_NODE &&
-                n.querySelector("ytd-rich-shelf-renderer")?.attributes[
-                    "is-shorts"
-                ]
+                (n.nodeName === "YTD-RICH-SECTION-RENDERER" &&
+                    n.ELEMENT_NODE &&
+                    n.querySelector("ytd-rich-shelf-renderer")?.attributes[
+                        "is-shorts"
+                    ]) ||
+                n.nodeName === "YTD-REEL-SHELF-RENDERER"
             )
-                n.remove();
+                n.style.display = "none";
         }),
     );
 }
@@ -69,10 +81,20 @@ function removeShortNav() {
     document
         .querySelector("ytd-mini-guide-entry-renderer[aria-label=Shorts]")
         ?.remove();
+    document
+        .querySelector("ytd-guide-entry-renderer > a[title=Shorts]")
+        ?.remove();
 }
 
 function getPageManager() {
     return document.querySelector("ytd-page-manager");
+}
+
+function getRelated() {
+    return document
+        .getElementById("related")
+        .querySelector("ytd-watch-next-secondary-results-renderer")
+        .querySelector("div[id=items]");
 }
 
 function observe(
