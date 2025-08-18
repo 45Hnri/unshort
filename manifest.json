@@ -1,0 +1,20 @@
+{
+    "manifest_version": 2,
+    "name": "Unshort",
+    "version": "1.0.0",
+
+    "description": "Hides Youtube shorts on your homepage to stop you from wasting your time.",
+
+    "icons": {
+        "32": "icons/unshort-32.svg",
+        "48": "icons/unshort-32.svg",
+        "64": "icons/unshort-32.svg"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://*.youtube.com/*"],
+            "js": ["unshort.js"]
+        }
+    ]
+}

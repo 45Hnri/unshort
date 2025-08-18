@@ -1,0 +1,16 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="32"
+    height="32"
+    viewBox="0 0 32 32"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+>
+    <rect height="9" width="24" ry="99" rx="4" style="rotate:-30deg" y="12.5" x="-3.5" fill="#f03" stroke="#f03"/>
+    <rect height="9" width="24" ry="99" rx="4" style="rotate:-30deg" y="22.25" x="-8.5" fill="#f03" stroke="#f03"/>
+    <rect height="6" width="0.75" y="13" x="17.25" fill="#fff" stroke="#fff"/>
+    <rect height="6" width="0.75" y="13" x="14" fill="#fff" stroke="#fff"/>
+</svg>
