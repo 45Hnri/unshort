@@ -93,8 +93,8 @@ function getPageManager() {
 function getRelated() {
     return document
         .getElementById("related")
-        .querySelector("ytd-watch-next-secondary-results-renderer")
-        .querySelector("div[id=items]");
+        ?.querySelector("ytd-watch-next-secondary-results-renderer")
+        ?.querySelector("div[id=items]");
 }
 
 function observe(
