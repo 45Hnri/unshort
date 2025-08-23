@@ -5,3 +5,8 @@
 
 > [!NOTE]
 > Hides Youtube shorts on your homepage to stop you from wasting your time.
+
+## Development
+
+- view mobile youtube version on desktop devices:
+`https://m.youtube.com/?persist_app=1&app=m`
