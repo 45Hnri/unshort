@@ -1,7 +1,7 @@
 main();
 
 let m_obs = null;
-let url = null;
+let g_url = null;
 
 // Connect to related / featured (mobil) or Page Manager (desktop)
 function main() {
@@ -16,13 +16,7 @@ function main() {
                     () => m_getBrowseHost() || m_getWatchNext(),
                 ),
             undefined,
-            () => {
-                if (url !== document.URL) {
-                    url = document.URL;
-                    return true;
-                }
-                return false;
-            },
+            urlChanged,
         );
     } else {
         observe(
@@ -89,6 +83,7 @@ function act_shortCatcher(mut) {
 // Connect related (on video) or featured (on overview) grid
 function act_m_init(_, obs) {
     obs.disconnect();
+    document.querySelectorAll("ytm-rich-section-renderer").forEach(blockShort);
     if (m_getWatchNext()) {
         observe(m_getWatchNext(), act_m_related);
     } else {
@@ -127,7 +122,7 @@ function act_m_list(mut, obs) {
             document
                 .querySelectorAll("ytm-reel-shelf-renderer")
                 .forEach(blockShort),
-        50,
+        200,
     );
 }
 
@@ -171,6 +166,12 @@ function m_getWatchNext() {
 //######
 // UTILS
 //######
+
+function urlChanged() {
+    const changed = document.URL !== g_url;
+    if (changed) g_url = document.URL;
+    return changed;
+}
 
 function removeShortNav() {
     document
