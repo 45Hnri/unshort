@@ -84,6 +84,7 @@ function act_shortCatcher(mut) {
 function act_m_init(_, obs) {
     obs.disconnect();
     document.querySelectorAll("ytm-rich-section-renderer").forEach(blockShort);
+    m_removeShrotNav();
     if (m_getWatchNext()) {
         observe(m_getWatchNext(), act_m_related);
     } else {
@@ -180,6 +181,16 @@ function removeShortNav() {
     document
         .querySelector("ytd-guide-entry-renderer > a[title=Shorts]")
         ?.remove();
+}
+
+function m_removeShrotNav() {
+    document
+        .querySelector("ytm-pivot-bar-renderer")
+        ?.querySelectorAll("ytm-pivot-bar-item-renderer")
+        .forEach((i) => {
+            if (i.querySelector("span[role=text]")?.textContent === "Shorts")
+                i.remove();
+        });
 }
 
 function isMobilVersion() {
