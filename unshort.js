@@ -5,27 +5,26 @@ let g_url = null;
 
 // Connect to related / featured (mobil) or Page Manager (desktop)
 function main() {
-    if (isMobilVersion()) {
-        observe(
-            document.head.querySelector("title"),
-            () =>
+    observe(
+        document.head.querySelector("title"),
+        () => {
+            if (isMobilVersion())
                 observe(
                     document.body,
                     act_m_init,
                     { subtree: true, childList: true },
                     () => m_getBrowseHost() || m_getWatchNext(),
-                ),
-            undefined,
-            urlChanged,
-        );
-    } else {
-        observe(
-            document.body,
-            act_init,
-            { subtree: true, childList: true },
-            getPageManager,
-        );
-    }
+                );
+        },
+        undefined,
+        urlChanged,
+    );
+    observe(
+        document.body,
+        act_init,
+        { subtree: true, childList: true },
+        getPageManager,
+    );
 }
 
 //#################
@@ -118,11 +117,14 @@ function act_m_list(mut, obs) {
     obs.disconnect();
     m_obs = obs;
     act_shortCatcher(mut);
-    setTimeout(
-        () =>
+    retryTimeout(
+        [25, 50, 100, 200, 400, 800, 1600, 3200],
+        () => (
+            console.log("checked"),
             document
                 .querySelectorAll("ytm-reel-shelf-renderer")
-                .forEach(blockShort),
+                .forEach(blockShort)
+        ),
         200,
     );
 }
@@ -226,4 +228,13 @@ function observe(
         if (condition()) action(mutations, observer);
     });
     observer.observe(node, config);
+}
+
+async function retryTimeout(delays, fn) {
+    for (const delay of delays) {
+        const result = await new Promise((res) =>
+            setTimeout(() => res(fn()), delay),
+        );
+        if (result) break;
+    }
 }
