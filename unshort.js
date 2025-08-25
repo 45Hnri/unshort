@@ -119,12 +119,10 @@ function act_m_list(mut, obs) {
     act_shortCatcher(mut);
     retryTimeout(
         [25, 50, 100, 200, 400, 800, 1600, 3200],
-        () => (
-            console.log("checked"),
+        () =>
             document
                 .querySelectorAll("ytm-reel-shelf-renderer")
-                .forEach(blockShort)
-        ),
+                .forEach(blockShort),
         200,
     );
 }
